@@ -12,6 +12,30 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 // 导入自己的样式
 import './assets/css/index.css'
+// 引入axios
+import axios from 'axios'
+
+Vue.prototype.$http = axios
+// 配置基准路径
+axios.defaults.baseURL = 'http://localhost:8888/api/private/v1'
+
+// 请求拦截器
+axios.interceptors.request.use((config) => {
+  config.headers.Authorization = localStorage.getItem('token')
+  console.log('请求拦截器', config)
+  // 所有请求之前都要执行的操作
+  return config
+})
+
+// 响应拦截器
+axios.interceptors.response.use((response) => {
+  console.log('响应拦截器', response)
+  // 所有请求完成后都要执行的操作
+  return response
+}, (error) => {
+  // 错误处理
+  return Promise.reject(error)
+})
 // 安装插件
 Vue.use(ElementUI)
 

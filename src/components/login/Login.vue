@@ -31,7 +31,7 @@
 </template>
 <script>
 // 导入axios
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   data() {
@@ -62,7 +62,7 @@ export default {
       try{
         await this.$refs[formName].validate()
         // 表单验证成功发送请求完成
-        const res= await axios.post('http://localhost:8888/api/private/v1/login', this.loginForm)
+        const res= await this.$http.post('http://localhost:8888/api/private/v1/login', this.loginForm)
           // console.log(res)
             if(res.data.meta.status===200){
               // 将token存储到localStorage中
