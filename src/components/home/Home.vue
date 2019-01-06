@@ -38,6 +38,7 @@
         active-text-color="#ffd04b"
         :router="true"
         >
+        <!-- 用户管理菜单 -->
         <el-submenu index="1">
           <!-- template 用来展示菜单名称和图标 -->
           <template slot="title">
@@ -51,6 +52,26 @@
               </template>
             </el-menu-item>
         </el-submenu>
+        <!-- 权限管理菜单 -->
+        <el-submenu index="2">
+        <template slot="title">
+          <i class="el-icon-location"></i>
+          <span>权限管理</span>
+        </template>
+         <el-menu-item index="roles">
+           <template slot="title">
+            <i class="el-icon-menu"></i>
+            <span>角色列表</span>
+           </template>
+         </el-menu-item>
+         <el-menu-item index="rights">
+           <template slot="title">
+             <i class="el-icon-menu"></i>
+             <span>权限列表</span>
+           </template>
+         </el-menu-item>
+
+      </el-submenu>
       </el-menu>
     </el-aside>
     <!-- 主体内容 -->

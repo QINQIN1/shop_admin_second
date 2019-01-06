@@ -6,26 +6,32 @@ import VueRouter from 'vue-router'
 import Login from '@/components/login/Login'
 import Home from '@/components/home/Home'
 import Users from '@/components/users/Users'
+import Roles from '@/components/roles/Roles'
 
 // 安装插件
- Vue.use(VueRouter)
+Vue.use(VueRouter)
 
 // 创建路由实例并导出
 const router = new VueRouter({
   routes: [{
-      path: '/login',
-      component: Login,
-      name: 'login'
+    path: '/login',
+    component: Login,
+    name: 'login'
+  },
+  {
+    path: '/home',
+    component: Home,
+    name: 'home',
+    children: [{
+      path: '/users',
+      component: Users
     },
     {
-      path: '/home',
-      component: Home,
-      name: 'home',
-      children:[{
-        path:'/users',
-        component:Users
-      }]
+      path: '/roles',
+      component: Roles
     }
+    ]
+  }
   ]
 })
 // 导航守卫

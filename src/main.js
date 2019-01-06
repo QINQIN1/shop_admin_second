@@ -14,7 +14,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/index.css'
 // 引入axios
 import axios from 'axios'
-
+// 任意组件都可以使用axios了
 Vue.prototype.$http = axios
 // 配置基准路径
 axios.defaults.baseURL = 'http://localhost:8888/api/private/v1'

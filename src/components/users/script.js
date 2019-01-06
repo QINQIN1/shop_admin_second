@@ -141,7 +141,7 @@ export default {
     },
     // 添加用户隐藏对话框
     hideUserAddDialog () {
-      this.$refs.userAddFormRef.resetFields();
+      this.$refs.userAddFormRef.resetFields()
     },
     // 添加用户确认按钮
     async addUser () {
