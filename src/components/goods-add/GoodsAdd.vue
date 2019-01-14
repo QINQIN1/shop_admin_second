@@ -3,6 +3,6 @@
 <style src='./style.less' lang='less' scoped></style>
 <style>
   .ql-container{
-    height: 200px;
+    height: 180px;
   }
 </style>
