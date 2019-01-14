@@ -33,7 +33,10 @@
         <el-button icon="el-icon-edit" size="mini" type="primary" plain @click="showUserEditDialog(scope.row)"></el-button>
         <el-button icon="el-icon-delete" size="mini" type="danger" plain
         @click="delUserById(scope.row.id)"></el-button>
-        <el-button icon="el-icon-check" size="mini" type="success" plain>分配角色</el-button>
+        <el-button icon="el-icon-check" size="mini" type="success" plain
+        @click="showRightsDialog(scope.row)">
+        分配角色
+      </el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -48,7 +51,7 @@
   ></el-pagination>
 
   <!-- 添加用户 -->
-  <el-dialog title="添加用户" :visible.sync="isShowUserAddDialog" @close="hideUserAddDialog">
+  <el-dialog title="添加用户" :visible.sync="isShowUserAddDialog"               @close="hideUserAddDialog">
     <el-form :model="userAddForm" :rules="rules" label-width="100px" ref="userAddFormRef">
       <el-form-item label="用户名" prop="username">
         <el-input v-model="userAddForm.username" autocomplete="off"></el-input>
@@ -84,6 +87,28 @@
     <div slot="footer" class="dialog-footer">
       <el-button @click="isShowUserEditDialog = false">取 消</el-button>
       <el-button type="primary" @click="updateUser">确 定</el-button>
+    </div>
+  </el-dialog>
+  <!-- 分配角色对话框 -->
+  <el-dialog title="分配角色" :visible.sync="isShowRoleDialog">
+    <el-form :model="roleForm" label-width="100px">
+      <el-form-item label="用户名" >
+        <el-tag type="info">{{roleForm.userName}}</el-tag>
+      </el-form-item>
+      <el-form-item label="角色列表" >
+         <el-select v-model="roleForm.rid" placeholder="请选择角色">
+          <el-option
+            v-for="role in roleList"
+            :key="role.id"
+            :label="role.roleName"
+            :value="role.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="isShowRoleDialog = false">取 消</el-button>
+      <el-button type="primary" @click="assignRole">确 定</el-button>
     </div>
   </el-dialog>
 </div>

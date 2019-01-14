@@ -32,46 +32,27 @@
       <!-- index 唯一标志 -->
       <!-- :router="true" 启用路由模式 -->
       <el-menu
-        default-active="2"
+        :default-active="$route.path"
         background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b"
         :router="true"
+        :unique-opened="true"
         >
         <!-- 用户管理菜单 -->
-        <el-submenu index="1">
+        <el-submenu :index="lev1.order+''" v-for="lev1 in menus" :key="lev1.id">
           <!-- template 用来展示菜单名称和图标 -->
           <template slot="title">
             <i class="el-icon-location"></i>
-            <span>用户管理</span>
+            <span>{{lev1.authName}}</span>
           </template>
-            <el-menu-item index="users">
+            <el-menu-item :index="'/' + lev2.path" v-for="lev2 in lev1.children" :key="lev2.id">
               <template slot="title">
                 <i class="el-icon-menu"></i>
-                <span>用户列表</span>
+                <span>{{lev2.authName}}</span>
               </template>
             </el-menu-item>
         </el-submenu>
-        <!-- 权限管理菜单 -->
-        <el-submenu index="2">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>权限管理</span>
-        </template>
-         <el-menu-item index="roles">
-           <template slot="title">
-            <i class="el-icon-menu"></i>
-            <span>角色列表</span>
-           </template>
-         </el-menu-item>
-         <el-menu-item index="rights">
-           <template slot="title">
-             <i class="el-icon-menu"></i>
-             <span>权限列表</span>
-           </template>
-         </el-menu-item>
-
-      </el-submenu>
       </el-menu>
     </el-aside>
     <!-- 主体内容 -->
@@ -84,7 +65,26 @@
 
 <script>
 export default {
+ created () {
+    // 获取菜单列表数据
+    console.log('路由参数', this.$route)
+    this.getMenuList()
+  },
+  data () {
+     return {
+      menus: []
+    }
+  },
     methods: {
+    // 获取菜单列表数据
+      async getMenuList(){
+        const res = await this.$http.get('/menus')
+        console.log(res)
+        if(res.data.meta.status === 200){
+          this.menus=res.data.data
+        }
+      },
+      // 退出登录
       async logout(){
         try{
           const res=await this.$confirm('是否确认退出?', '温馨提示', {

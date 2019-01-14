@@ -3,7 +3,10 @@
 export default {
   // 进入页面发送请求
   created () {
+    // 获取用户列表数据
     this.getUserList()
+    // 获取角色列表数据
+    this.getRoleList()
   },
   data () {
     return {
@@ -68,7 +71,17 @@ export default {
         mobile: '',
         id: ''
       },
-      isShowUserEditDialog: false
+      isShowUserEditDialog: false,
+      // 用户角色列表数据
+      roleList: [],
+      // 分配角色数据
+      roleForm: {
+        userName: '',
+        rid: -1,
+        userId: -1
+      },
+      // 展示分配角色对话框
+      isShowRoleDialog: false
     }
   },
   methods: {
@@ -85,7 +98,7 @@ export default {
         // }
       }
       const res = await this.$http.get('/users', options)
-      console.log('用户列表数据', res)
+      // console.log('用户列表数据', res)
       if (res.data.meta.status === 200) {
         // 表示登录成功
         this.userList = res.data.data.users
@@ -150,7 +163,7 @@ export default {
         await this.$refs.userAddFormRef.validate()
         // 点击确认关闭对话框
         const res = await this.$http.post('/users', this.userAddForm)
-        console.log(res)
+        // console.log(res)
         if (res.data.meta.status === 201) {
           this.isShowUserAddDialog = false
           this.$message({
@@ -173,7 +186,7 @@ export default {
           type: 'warning'
         })
         const res = await this.$http.delete(`/users/${id}`)
-        console.log(res)
+        // console.log(res)
         if (res.data.meta.status === 200) {
           this.$message({
             type: 'success',
@@ -220,7 +233,41 @@ export default {
         })
         this.getUserList(this.pagenum, this.searchText)
       }
+    },
+    // 分配角色展示对话框
+    showRightsDialog (curUser) {
+      this.isShowRoleDialog = true
+      // console.log(curUser)
+      const role = this.roleList.find(item => item.roleName === curUser.role_name)
+      // console.log(role)
+      const rid = role ? role.id : ''
+      // 设置用户名默认值和角色下拉框选中内容
+      this.roleForm.userName = curUser.username
+      this.roleForm.rid = rid
+      this.roleForm.userId = curUser.id
+    },
+    // 获取角色列表数据
+    async getRoleList () {
+      const res = await this.$http.get('/roles')
+      // console.log(res)
+      this.roleList = res.data.data
+    },
+    // 给用户分配角色确认按钮
+    async assignRole () {
+      const {userId, rid} = this.roleForm
+      const res = await this.$http.put(`/users/${userId}/role`, {
+        rid
+      })
+      console.log(res)
+      if (res.data.meta.status === 200) {
+        this.isShowRoleDialog = false
+        this.$message({
+          type: 'success',
+          message: res.data.meta.msg
+        })
+        // 重新获取列表数据
+        this.getUserList(this.pagenum, this.searchText)
+      }
     }
-
   }
 }
